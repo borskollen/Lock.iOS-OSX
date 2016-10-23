@@ -40,10 +40,12 @@
 
 - (void)dismissLock {
     [[NSNotificationCenter defaultCenter] postNotificationName:A0LockNotificationLockDismissed object:nil];
-    [self.controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-    if (self.controller.onUserDismissBlock) {
-        self.controller.onUserDismissBlock();
-    }
+    __weak A0LockEventDelegate *weakSelf = self;
+    [self.controller.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        if (weakSelf.controller.onUserDismissBlock) {
+            weakSelf.controller.onUserDismissBlock();
+        }
+    }];
 }
 
 - (void)backToLock {
